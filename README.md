@@ -30,9 +30,12 @@ Slave ID's are supported, it is therefore possible to have multiple slaves on th
   * 3 - Illegal Data Value
   
 # Documentation
-Whole libary is enclosed in a namespace called "ModbusRTU".
+Whole libary is enclosed in a namespace called ModbusRTU.
 
-### ModbusRTUSlave Class Members
+## ModbusRTUSlave Class
+The class is a template class with one parameter called registerCount. The parameter specifies the size of the register array or maximum register count.
+
+### Members
 ```c++ 
    void begin(unsigned long baud, HardwareSerial *pHardwareSerial = &Serial, unsigned char slaveId = 1)
 ```
@@ -45,3 +48,44 @@ Whole libary is enclosed in a namespace called "ModbusRTU".
    void update()
 ```
    The function checks for incoming frames from master, attempts to parse the frame upon receiving, thereafter returns the result to the master. The parsing includes reading/writing to the modbus entites. If parsing a frame fails, the slave will attempt to send an exception.
+
+```c++
+   long addCoil(bool *coil, unsigned short _register)
+```
+   The function adds a coil to the register array.
+   * Parameters
+      * coil: Pointer to a read/write boolean value.
+      * _register: The register number to be assigned to the coil.
+   * Return value
+      * Returns the register number upon success.
+      * Returns -1 upon failure.
+```c++
+   long addDiscreteInput(const bool *discreteInput, unsigned short _register)
+```
+   The function adds a discrete input to the register array.
+   * Parameters
+      * discreteInput: Pointer to a read-only boolean value.
+      * _register: The register number to be assigned to the discrete input.
+   * Return value
+      * Returns the register number upon success.
+      * Returns -1 upon failure.
+```c++
+   long addInputRegister(const short *inputRegister, unsigned short _register)
+```
+   The function adds an input register to the register array.
+   * Parameters
+      * inputRegister: Pointer to a read-only 16-bit value.
+      * _register: The register number to be assigned to the input register.
+   * Return value
+      * Returns the register number upon success.
+      * Returns -1 upon failure.
+```c++
+   long addHoldingRegister(short *holdingRegister, unsigned short _register)
+```
+   The function adds an input register to the register array.
+   * Parameters
+      * holdingRegister: Pointer to a read/write 16-bit value.
+      * _register: The register number to be assigned to the holding register.
+   * Return value
+      * Returns the register number upon success.
+      * Returns -1 upon failure.
