@@ -33,10 +33,14 @@ Slave ID's are supported, it is therefore possible to have multiple slaves on th
 Whole libary is enclosed in a namespace called "ModbusRTU".
 
 ### ModbusRTUSlave Class Members
- void begin(unsigned long baud, HardwareSerial *pHardwareSerial = &Serial, unsigned char slaveId = 1)
-    The begin function sets up variables and configures the hardware serial class.
-    baud: The baud rate the serial interface should run at.
-         * pHardwareSerial: Pointer to a HardwareSerial instance. Defaults to &Serial.
-         * slaveId: Slave ID to be used by this slave. Defaults to 1.
- void update()
-The function checks for incoming frames from master, attempts to parse the frame upon receiving, thereafter returns the result to the master. The parsing includes reading/writing to the modbus entites. If parsing a frame fails, the slave will attempt to send an exception.
+```c++ 
+   void begin(unsigned long baud, HardwareSerial *pHardwareSerial = &Serial, unsigned char slaveId = 1)
+```
+   The begin function sets up variables and configures the hardware serial class.
+   baud: The baud rate the serial interface should run at.
+   pHardwareSerial: Pointer to a HardwareSerial instance. Defaults to &Serial.
+   slaveId: Slave ID to be used by this slave. Defaults to 1.
+```c++
+   void update()
+```
+   The function checks for incoming frames from master, attempts to parse the frame upon receiving, thereafter returns the result to the master. The parsing includes reading/writing to the modbus entites. If parsing a frame fails, the slave will attempt to send an exception.
