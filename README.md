@@ -37,9 +37,10 @@ Whole libary is enclosed in a namespace called "ModbusRTU".
    void begin(unsigned long baud, HardwareSerial *pHardwareSerial = &Serial, unsigned char slaveId = 1)
 ```
    The begin function sets up variables and configures the hardware serial class.
-   baud: The baud rate the serial interface should run at.
-   pHardwareSerial: Pointer to a HardwareSerial instance. Defaults to &Serial.
-   slaveId: Slave ID to be used by this slave. Defaults to 1.
+   * Parameters
+      * baud: The baud rate the serial interface should run at.
+      * pHardwareSerial: Pointer to a HardwareSerial instance. Defaults to &Serial.
+      * slaveId: Slave ID to be used by this slave. Defaults to 1.
 ```c++
    void update()
 ```
