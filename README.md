@@ -30,6 +30,8 @@ Slave ID's are supported, it is therefore possible to have multiple slaves on th
   * 3 - Illegal Data Value
   
 # Documentation
-* Namespace 'ModbusRTU'
-  * Class 'ModbusRTUSlave'
-     * Members
+Whole libary is enclosed in a namespace called "ModbusRTU".
+
+## Class ModbusRTUSlave
+### Members
+> void begin(unsigned long baud, HardwareSerial *pHardwareSerial = &Serial, unsigned char slaveId = 1)
