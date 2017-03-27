@@ -44,10 +44,13 @@ The class is a template class with one parameter called registerCount. The param
       * baud: The baud rate the serial interface should run at.
       * pHardwareSerial: Pointer to a HardwareSerial instance. Defaults to &Serial.
       * slaveId: Slave ID to be used by this slave. Defaults to 1.
+
+
 ```c++
    void update()
 ```
    The function checks for incoming frames from master, attempts to parse the frame upon receiving, thereafter returns the result to the master. The parsing includes reading/writing to the modbus entites. If parsing a frame fails, the slave will attempt to send an exception.
+
 
 ```c++
    long addCoil(bool *coil, unsigned short _register)
@@ -59,6 +62,8 @@ The class is a template class with one parameter called registerCount. The param
    * Return value
       * Returns the register number upon success.
       * Returns -1 upon failure.
+
+
 ```c++
    long addDiscreteInput(const bool *discreteInput, unsigned short _register)
 ```
@@ -69,6 +74,8 @@ The class is a template class with one parameter called registerCount. The param
    * Return value
       * Returns the register number upon success.
       * Returns -1 upon failure.
+
+
 ```c++
    long addInputRegister(const short *inputRegister, unsigned short _register)
 ```
@@ -79,6 +86,8 @@ The class is a template class with one parameter called registerCount. The param
    * Return value
       * Returns the register number upon success.
       * Returns -1 upon failure.
+
+
 ```c++
    long addHoldingRegister(short *holdingRegister, unsigned short _register)
 ```
