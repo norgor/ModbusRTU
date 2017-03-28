@@ -411,7 +411,7 @@ namespace ModbusRTU
 		//Length of data type depends on register type
 		//Input registers and holding registers are two-byte
 		//Discrete inputs and coils are one-byte
-		long addRegister(byte *pData, uint16_t _register, ModbusRegister::RegisterType registerType)
+		int32_t addRegister(byte *pData, uint16_t _register, ModbusRegister::RegisterType registerType)
 		{
 			if (m_AssignedRegisters >= registerCount || findRegister(_register))
 				return -1;
@@ -430,7 +430,7 @@ namespace ModbusRTU
 		//Adds coil to register list and returns register number
 		//Returns -1 when no more registers available
 		//
-		long addCoil(bool *coil, uint16_t _register)
+		int32_t addCoil(bool *coil, uint16_t _register)
 		{
 			return addRegister((byte*)coil, _register, ModbusRegister::Coil);
 		}
@@ -438,7 +438,7 @@ namespace ModbusRTU
 		//Adds discrete input to register list and returns register number
 		//Returns -1 when no more registers available
 		//
-		long addDiscreteInput(const bool *discreteInput, uint16_t _register)
+		int32_t addDiscreteInput(const bool *discreteInput, uint16_t _register)
 		{
 			return addRegister((byte*)discreteInput, _register, ModbusRegister::DiscreteInput);
 		}
@@ -446,7 +446,7 @@ namespace ModbusRTU
 		//Adds input register to register list and returns register number'
 		//Returns -1 when no more registers available
 		//
-		long addInputRegister(const uint16_t *inputRegister, uint16_t _register)
+		int32_t addInputRegister(const uint16_t *inputRegister, uint16_t _register)
 		{
 			return addRegister((byte*)inputRegister, _register, ModbusRegister::InputRegister);
 		}
@@ -454,7 +454,7 @@ namespace ModbusRTU
 		//Adds holding register to register list and returns register 
 		//Returns -1 when no more registers available
 		//
-		long addHoldingRegister(uint16_t *holdingRegister, uint16_t _register)
+		int32_t addHoldingRegister(uint16_t *holdingRegister, uint16_t _register)
 		{
 			return addRegister((byte*)holdingRegister, _register, ModbusRegister::HoldingRegister);
 		}
