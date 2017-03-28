@@ -42,11 +42,11 @@ namespace ModbusRTU
 		uint8_t *m_pData;
 	};
 
-	template <unsigned short registerCount>
+	template <uint16_t registerCount>
 	class ModbusRTUSlave
 	{
 
-		enum FunctionCode : unsigned char
+		enum FunctionCode : uint8_t
 		{
 			ReadCoils = 1,
 			ReadDiscreteInputs = 2,
@@ -59,7 +59,7 @@ namespace ModbusRTU
 			Exception = 128,
 		};
 
-		enum ExceptionCode : unsigned char
+		enum ExceptionCode : uint8_t
 		{
 			IllegalFunction = 1,
 			IllegalDataAddress = 2,
@@ -78,7 +78,7 @@ namespace ModbusRTU
 		//Checks if frame has been corrupted
 		//
 		//
-		bool isFrameCorrupted(unsigned char *frame, unsigned short frameLength)
+		bool isFrameCorrupted(uint8_t *frame, uint16_t frameLength)
 		{
 			//Check if CRC16 is the same
 			return (crc16(frame, frameLength - 2) != *(short*)&frame[frameLength - 2]);
@@ -98,9 +98,9 @@ namespace ModbusRTU
 		//Attempts to find register in register array
 		//Returns pointer to register if register found
 		//Returns nullptr if register not found
-		ModbusRegister *findRegister(unsigned short _register)
+		ModbusRegister *findRegister(uint16_t _register)
 		{
-			for (unsigned short i = 0; i < m_AssignedRegisters; i++)
+			for (uint16_t i = 0; i < m_AssignedRegisters; i++)
 			{
 				if (m_RegisterArray[i].m_RegisterNumber == _register && m_RegisterArray[i].m_pData && m_RegisterArray[i].m_RegisterType != ModbusRegister::None)
 					return &m_RegisterArray[i];
@@ -165,12 +165,12 @@ namespace ModbusRTU
 		//Parses input frame
 		//
 		//
-		void parseFrame(unsigned char *frame, size_t frameLength)
+		void parseFrame(uint8_t *frame, uint16_t frameLength)
 		{
 			if (frame[1] == ReadCoils)
 			{
-				unsigned short targetRegister = endianSwap16(*(unsigned short*)&frame[2]);
-				unsigned short targetRegisterLength = endianSwap16(*(unsigned short*)&frame[4]);
+				uint16_t targetRegister = endianSwap16(*(uint16_t*)&frame[2]);
+				uint16_t targetRegisterLength = endianSwap16(*(uint16_t*)&frame[4]);
 				byte dataLength = (ceil(((float)targetRegisterLength) / 8.0f));
 
 				//Write frame header
@@ -179,7 +179,7 @@ namespace ModbusRTU
 				m_OutputFrame[2] = dataLength;
 
 				//Loop through requested registers
-				for (int i = 0; i < targetRegisterLength; i++)
+				for (uint16_t i = 0; i < targetRegisterLength; i++)
 				{
 					//Find the register
 					ModbusRegister *pRegister = findRegister(targetRegister + i);
@@ -206,8 +206,8 @@ namespace ModbusRTU
 			}
 			else if (frame[1] == ReadDiscreteInputs)
 			{
-				unsigned short targetRegister = endianSwap16(*(unsigned short*)&frame[2]);
-				unsigned short targetRegisterLength = endianSwap16(*(unsigned short*)&frame[4]);
+				uint16_t targetRegister = endianSwap16(*(uint16_t*)&frame[2]);
+				uint16_t targetRegisterLength = endianSwap16(*(uint16_t*)&frame[4]);
 				byte dataLength = (ceil(((float)targetRegisterLength) / 8.0f));
 
 				//Write frame header
@@ -216,7 +216,7 @@ namespace ModbusRTU
 				m_OutputFrame[2] = dataLength;
 
 				//Loop through requested registers
-				for (int i = 0; i < targetRegisterLength; i++)
+				for (uint16_t i = 0; i < targetRegisterLength; i++)
 				{
 					//Find the register
 					ModbusRegister *pRegister = findRegister(targetRegister + i);
@@ -243,9 +243,9 @@ namespace ModbusRTU
 			}
 			else if (frame[1] == ReadMultipleHoldingRegisters)
 			{
-				unsigned short targetRegister = endianSwap16(*(unsigned short*)&frame[2]);
-				unsigned short targetRegisterLength = endianSwap16(*(unsigned short*)&frame[4]);
-				byte dataLength = targetRegisterLength * 2;
+				uint16_t targetRegister = endianSwap16(*(uint16_t*)&frame[2]);
+				uint16_t targetRegisterLength = endianSwap16(*(uint16_t*)&frame[4]);
+				uint8_t dataLength = targetRegisterLength * 2;
 
 				//Write frame header
 				m_OutputFrame[0] = m_SlaveID;
@@ -253,7 +253,7 @@ namespace ModbusRTU
 				m_OutputFrame[2] = dataLength;
 
 				//Loop through requested registers
-				for (int i = 0; i < targetRegisterLength; i++)
+				for (uint16_t i = 0; i < targetRegisterLength; i++)
 				{
 					//Find the register
 					ModbusRegister *pRegister = findRegister(targetRegister + i);
@@ -261,7 +261,7 @@ namespace ModbusRTU
 					//Check if register is valid
 					if (pRegister && pRegister->m_RegisterType == ModbusRegister::HoldingRegister)
 					{
-						*(unsigned short*)&m_OutputFrame[3 + (i * 2)] = endianSwap16(*(unsigned short*)pRegister->m_pData);
+						*(uint16_t*)&m_OutputFrame[3 + (i * 2)] = endianSwap16(*(uint16_t*)pRegister->m_pData);
 					}
 					else
 					{
@@ -276,8 +276,8 @@ namespace ModbusRTU
 			}
 			else if (frame[1] == ReadInputRegisters)
 			{
-				unsigned short targetRegister = endianSwap16(*(unsigned short*)&frame[2]);
-				unsigned short targetRegisterLength = endianSwap16(*(unsigned short*)&frame[4]);
+				uint16_t targetRegister = endianSwap16(*(uint16_t*)&frame[2]);
+				uint16_t targetRegisterLength = endianSwap16(*(uint16_t*)&frame[4]);
 				byte dataLength = targetRegisterLength * 2;
 
 				//Write frame header
@@ -286,7 +286,7 @@ namespace ModbusRTU
 				m_OutputFrame[2] = dataLength;
 
 				//Loop through requested registers
-				for (int i = 0; i < targetRegisterLength; i++)
+				for (uint16_t i = 0; i < targetRegisterLength; i++)
 				{
 					//Find the register
 					ModbusRegister *pRegister = findRegister(targetRegister + i);
@@ -294,7 +294,7 @@ namespace ModbusRTU
 					//Check if register is valid
 					if (pRegister && pRegister->m_RegisterType == ModbusRegister::InputRegister)
 					{
-						*(unsigned short*)&m_OutputFrame[3 + (i * 2)] = endianSwap16(*(short*)pRegister->m_pData);
+						*(uint16_t*)&m_OutputFrame[3 + (i * 2)] = endianSwap16(*(short*)pRegister->m_pData);
 					}
 					else
 					{
@@ -309,13 +309,13 @@ namespace ModbusRTU
 			}
 			else if (frame[1] == WriteSingleCoil)
 			{
-				ModbusRegister *pRegister = findRegister(endianSwap16(*(unsigned short*)&frame[2]));
+				ModbusRegister *pRegister = findRegister(endianSwap16(*(uint16_t*)&frame[2]));
 
 				//Check if register exists and if it is of correct type
 				if (pRegister && pRegister->m_RegisterType == ModbusRegister::Coil)
 				{
 					//Write the target value to coil
-					*(bool*)pRegister->m_pData = ((*(unsigned short*)&frame[4]) == true);
+					*(bool*)pRegister->m_pData = ((*(uint16_t*)&frame[4]) == true);
 				}
 				else
 				{
@@ -328,13 +328,13 @@ namespace ModbusRTU
 			}
 			else if (frame[1] == WriteSingleRegister)
 			{
-				ModbusRegister *pRegister = findRegister(endianSwap16(*(unsigned short*)&frame[2]));
+				ModbusRegister *pRegister = findRegister(endianSwap16(*(uint16_t*)&frame[2]));
 
 				//Check if register exists and if it is of correct type
 				if (pRegister && pRegister->m_RegisterType == ModbusRegister::HoldingRegister)
 				{
 					//Write the target value to the register
-					*(unsigned short*)pRegister->m_pData = endianSwap16(*(unsigned short*)&frame[4]);
+					*(uint16_t*)pRegister->m_pData = endianSwap16(*(uint16_t*)&frame[4]);
 				}
 				else
 				{
@@ -347,10 +347,10 @@ namespace ModbusRTU
 			}
 			else if (frame[1] == WriteMultipleCoils)
 			{
-				unsigned short targetRegister = endianSwap16(*(unsigned short*)&frame[2]);
-				unsigned short targetRegisterLength = endianSwap16(*(unsigned short*)&frame[4]);
+				uint16_t targetRegister = endianSwap16(*(uint16_t*)&frame[2]);
+				uint16_t targetRegisterLength = endianSwap16(*(uint16_t*)&frame[4]);
 
-				for (int i = 0; i < targetRegisterLength; i++)
+				for (uint16_t i = 0; i < targetRegisterLength; i++)
 				{
 					ModbusRegister *pRegister = findRegister(targetRegister + i);
 
@@ -368,18 +368,18 @@ namespace ModbusRTU
 					}
 				}
 
-				unsigned short lastCrc = *(unsigned short*)&frame[6];
+				uint16_t lastCrc = *(uint16_t*)&frame[6];
 
-				*(unsigned short*)&frame[6] = crc16(frame, 6);
+				*(uint16_t*)&frame[6] = crc16(frame, 6);
 				m_pHardwareSerial->write(frame, 8);
-				*(unsigned short*)&frame[6] = lastCrc;
+				*(uint16_t*)&frame[6] = lastCrc;
 			}
 			else if (frame[1] == WriteMultipleRegisters)
 			{
-				unsigned short targetRegister = endianSwap16(*(unsigned short*)&frame[2]);
-				unsigned short targetRegisterLength = endianSwap16(*(unsigned short*)&frame[4]);
+				uint16_t targetRegister = endianSwap16(*(uint16_t*)&frame[2]);
+				uint16_t targetRegisterLength = endianSwap16(*(uint16_t*)&frame[4]);
 
-				for (int i = 0; i < targetRegisterLength; i++)
+				for (uint16_t i = 0; i < targetRegisterLength; i++)
 				{
 					ModbusRegister *pRegister = findRegister(targetRegister + i);
 
@@ -411,7 +411,7 @@ namespace ModbusRTU
 		//Length of data type depends on register type
 		//Input registers and holding registers are two-byte
 		//Discrete inputs and coils are one-byte
-		long addRegister(byte *pData, unsigned short _register, ModbusRegister::RegisterType registerType)
+		long addRegister(byte *pData, uint16_t _register, ModbusRegister::RegisterType registerType)
 		{
 			if (m_AssignedRegisters >= registerCount || findRegister(_register))
 				return -1;
@@ -430,7 +430,7 @@ namespace ModbusRTU
 		//Adds coil to register list and returns register number
 		//Returns -1 when no more registers available
 		//
-		long addCoil(bool *coil, unsigned short _register)
+		long addCoil(bool *coil, uint16_t _register)
 		{
 			return addRegister((byte*)coil, _register, ModbusRegister::Coil);
 		}
@@ -438,7 +438,7 @@ namespace ModbusRTU
 		//Adds discrete input to register list and returns register number
 		//Returns -1 when no more registers available
 		//
-		long addDiscreteInput(const bool *discreteInput, unsigned short _register)
+		long addDiscreteInput(const bool *discreteInput, uint16_t _register)
 		{
 			return addRegister((byte*)discreteInput, _register, ModbusRegister::DiscreteInput);
 		}
@@ -446,7 +446,7 @@ namespace ModbusRTU
 		//Adds input register to register list and returns register number'
 		//Returns -1 when no more registers available
 		//
-		long addInputRegister(const short *inputRegister, unsigned short _register)
+		long addInputRegister(const uint16_t *inputRegister, uint16_t _register)
 		{
 			return addRegister((byte*)inputRegister, _register, ModbusRegister::InputRegister);
 		}
@@ -454,7 +454,7 @@ namespace ModbusRTU
 		//Adds holding register to register list and returns register 
 		//Returns -1 when no more registers available
 		//
-		long addHoldingRegister(short *holdingRegister, unsigned short _register)
+		long addHoldingRegister(uint16_t *holdingRegister, uint16_t _register)
 		{
 			return addRegister((byte*)holdingRegister, _register, ModbusRegister::HoldingRegister);
 		}
@@ -462,10 +462,10 @@ namespace ModbusRTU
 		//Initializes Modbus and serial data transmission
 		//
 		//
-		void begin(unsigned long baud, HardwareSerial *pHardwareSerial = &Serial, unsigned char slaveId = 1)
+		void begin(uint32_t baud, HardwareSerial *pHardwareSerial = &Serial, uint8_t slaveId = 1)
 		{
 			//Clear all registers
-			for (unsigned short i = 0; i < registerCount; i++)
+			for (uint16_t i = 0; i < registerCount; i++)
 			{
 				m_RegisterArray[i].m_RegisterType = ModbusRegister::None;
 				m_RegisterArray[i].m_pData = nullptr;
