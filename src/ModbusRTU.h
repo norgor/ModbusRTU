@@ -1,7 +1,6 @@
 /*
 Filename:	ModbusRTULib.h
-Author:		Fusion
-Contact:	admin@fusiondev.pw
+Author:		norgor
 Date:		27.03.2017
 */
 
