@@ -1,8 +1,7 @@
 # About
 The ModbusRTU library is a **simple** to use library that allows an arduino to act as a Modbus slave. It attempts to obscure all unnecessary parts of the protocol to provide a clean interface.
 
-The library does not allocate memory dynamically after instantiation, which allows for simpler diagnostics and increased speed.
-
+The library pre-allocates all necessary memory upon instantiation, which improves the performance of the library and allows for simpler diagnostics. 
 
 # Support
 Slave ID's are supported, it is therefore possible to have multiple slaves on the same bus.
